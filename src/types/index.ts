@@ -28,15 +28,20 @@ export interface IBuyer {
 }
 
 export interface IProductListResponse {
+  total: number;
   items: IProduct[];
 }
 
 export interface IOrderRequest {
-  buyer: IBuyer;
+  payment: TPayment;
+  email: string;
+  phone: string;
+  address: string;
   items: IProduct[];
+  totalCost: number;
 }
 
 export interface IOrderResult {
-  orderId: string;
+  id: string;
   total: number;
 }

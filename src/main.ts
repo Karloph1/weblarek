@@ -4,7 +4,7 @@ import { Basket } from "./components/Models/Basket.ts";
 import { Buyer } from "./components/Models/Buyer.ts";
 import { apiProducts } from "./utils/data.ts";
 import { Api } from "./components/base/Api.ts";
-import { CommunicationLayer } from "./components/communicationLayer.ts";
+import { CommunicationLayer } from "./components/CommunicationLayer.ts";
 
 const productsModel = new ProductCatalog();
 productsModel.setProducts(apiProducts.items);
@@ -17,6 +17,7 @@ console.log(
 productsModel.setCurrentProduct(productsModel.getProducts()[1]);
 console.log("Текущий предмет: ", productsModel.getCurrentProduct());
 
+console.log("--------------");
 const basketModel = new Basket();
 basketModel.addProduct(productsModel.getProducts()[1]);
 basketModel.addProduct(productsModel.getProducts()[2]);
@@ -39,6 +40,7 @@ basketModel.addProduct(productsModel.getProducts()[2]);
 console.log("Цена товаров в корзине: ", basketModel.getGeneralPrice());
 console.log("Количество товаров в корзине: ", basketModel.getProductsAmount());
 
+console.log("--------------");
 const buyerModel = new Buyer();
 buyerModel.setBuyerPayment("card");
 console.log("Текущие данные пользователи: ", buyerModel.getBuyer());
@@ -56,9 +58,15 @@ console.log(
   buyerModel.validateBuyer(),
 );
 
-const baseUrl = "https://larek-api.nomoreparties.co";
-console.log(baseUrl);
-const apiInstance = new Api(baseUrl);
+buyerModel.clearBuyer();
+console.log(
+  "Нынешнее состояние данных пользователя: ",
+  buyerModel.validateBuyer(),
+);
+
+const API_ORIGIN: string = import.meta.env.VITE_API_ORIGIN;
+console.log(API_ORIGIN);
+const apiInstance = new Api(API_ORIGIN);
 const commLayer = new CommunicationLayer(apiInstance);
 
 commLayer

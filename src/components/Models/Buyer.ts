@@ -1,10 +1,10 @@
-import { TPayment } from "../../types/index";
+import { IBuyer, TPayment } from "../../types/index";
 
 export class Buyer {
-  private payment?: TPayment;
-  private email?: string;
-  private phone?: string;
-  private address?: string;
+  private payment: TPayment = "";
+  private email: string = "";
+  private phone: string = "";
+  private address: string = "";
 
   setBuyerPayment(payment: TPayment): void {
     this.payment = payment;
@@ -22,49 +22,39 @@ export class Buyer {
     this.address = address;
   }
 
-  getBuyer(): Buyer {
-    return this;
+  getBuyer(): IBuyer {
+    return {
+      payment: this.payment,
+      email: this.email,
+      phone: this.phone,
+      address: this.address
+    };
   }
 
-  deleteBuyer(): void {
-    this.payment = undefined;
-    this.email = undefined;
-    this.phone = undefined;
-    this.address = undefined;
+  clearBuyer(): void {
+    this.payment = "";
+    this.email = "";
+    this.phone = "";
+    this.address = "";
   }
 
-  validateBuyer(): { field: string; message: string }[] {
-    const errors: {
-      field: string;
-      message: string;
-    }[] = [];
+  validateBuyer(): Partial<Record<keyof IBuyer, string>> {
+    const errors: Partial<Record<keyof IBuyer, string>> = {};
 
-    if (this.payment === undefined) {
-      errors.push({
-        field: "payment",
-        message: "Не выбран вид оплаты",
-      });
+    if (this.payment === "") {
+      errors.payment = "Не выбран вид оплаты";
     }
 
-    if (this.email === undefined) {
-      errors.push({
-        field: "email",
-        message: "Укажите электронную почту",
-      });
+    if (this.email === "") {
+      errors.email = "Укажите электронную почту";
     }
 
-    if (this.phone === undefined) {
-      errors.push({
-        field: "phone",
-        message: "Укажите телефон",
-      });
+    if (this.phone === "") {
+      errors.phone = "Укажите номер телефона";
     }
 
-    if (this.address === undefined) {
-      errors.push({
-        field: "address",
-        message: "Укажите адрес",
-      });
+    if (this.address === "") {
+      errors.address = "Укажите адресс";
     }
 
     return errors;

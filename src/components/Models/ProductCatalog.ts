@@ -2,10 +2,11 @@ import { IProduct } from "../../types/index";
 
 export class ProductCatalog {
   private products: IProduct[];
-  private currentProduct?: IProduct;
+  private currentProduct: IProduct | null;
 
   constructor() {
     this.products = [];
+    this.currentProduct = null;
   }
 
   setProducts(products: IProduct[]): void {
@@ -28,7 +29,7 @@ export class ProductCatalog {
     this.currentProduct = product;
   }
 
-  getCurrentProduct(): IProduct | undefined {
+  getCurrentProduct(): IProduct | null {
     return this.currentProduct;
   }
 }
