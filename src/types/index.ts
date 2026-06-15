@@ -18,6 +18,8 @@ export interface IProduct {
   price: number | null;
 }
 
+export type TValidateArray = Partial<Record<keyof IBuyer, string>>;
+
 export type TPayment = "card" | "cash" | "";
 
 export interface IBuyer {
@@ -37,8 +39,8 @@ export interface IOrderRequest {
   email: string;
   phone: string;
   address: string;
-  items: IProduct[];
-  totalCost: number;
+  items: IProduct['id'][];
+  total: number;
 }
 
 export interface IOrderResult {

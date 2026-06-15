@@ -1,4 +1,4 @@
-import { IApi, IProductListResponse, IOrderRequest, IOrderResult, IProduct } from '../types/index.ts';
+import { IApi, IProductListResponse, IOrderRequest, IOrderResult } from '../types/index.ts';
 
 export class CommunicationLayer {
     constructor(private api: IApi) {}

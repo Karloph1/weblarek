@@ -5,6 +5,7 @@ import { Buyer } from "./components/Models/Buyer.ts";
 import { apiProducts } from "./utils/data.ts";
 import { Api } from "./components/base/Api.ts";
 import { CommunicationLayer } from "./components/CommunicationLayer.ts";
+import {API_URL} from "./utils/constants.ts";
 
 const productsModel = new ProductCatalog();
 productsModel.setProducts(apiProducts.items);
@@ -64,11 +65,11 @@ console.log(
   buyerModel.validateBuyer(),
 );
 
-const API_ORIGIN: string = import.meta.env.VITE_API_ORIGIN;
-console.log(API_ORIGIN);
-const apiInstance = new Api(API_ORIGIN);
+const url: string = API_URL;
+const apiInstance = new Api(url);
 const commLayer = new CommunicationLayer(apiInstance);
 
+console.log(API_URL);
 commLayer
   .fetchProducts()
   .then((response) => {
