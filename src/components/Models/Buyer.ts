@@ -1,10 +1,13 @@
 import { IBuyer, TPayment, TValidateArray } from "../../types/index";
+import { IEvents } from "../base/Events";
 
 export class Buyer {
   private payment: TPayment = "";
   private email: string = "";
   private phone: string = "";
   private address: string = "";
+
+  constructor(private events: IEvents) {}
 
   setBuyerPayment(payment: TPayment): void {
     this.payment = payment;
@@ -27,7 +30,7 @@ export class Buyer {
       payment: this.payment,
       email: this.email,
       phone: this.phone,
-      address: this.address
+      address: this.address,
     };
   }
 

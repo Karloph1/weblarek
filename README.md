@@ -188,3 +188,139 @@ Presenter - презентер содержит основную логику п
 Методы класса:
 `get<T extends object>(uri: string)` - запрос на сервер для получения объекта с массивом товаров.
 `post<T extends object>(uri: string, data: object, method: ApiPostMethods = 'POST')` - отправка на сервер данных о покупателе и выбранных товарах
+
+
+### Слой представления (View)
+#### Класс CatalogCardView
+Является классом представления карточки в списке
+
+Поля класса: 
+`titleElement: HTMLElement` - html элемент заголовка
+`priceElement: HTMLElement` - html элемент цены
+`imageElement: HTMLImageElement` - html элемент картинки
+`categoryElement: HTMLElement` - html элемент категории
+
+Методы класса:
+`set title(title: string): void` - устанавливает заголовок карточки
+`set price(price: number | null): void` - устанавливает цену карточки
+`set image(image: string): void` - устанавливает изобржание карточки
+`set category(category: string): void` - устанавливает категорию карточки
+`render(data: IBasketCardView): HTMLElement` - рендерит карточку на экране
+
+
+#### Класс PreviewCardView
+Является классом представления описания карточки 
+
+Поля класса:
+`titleElement: HTMLElement` - html элемент заголовка
+`priceElement: HTMLElement` - html элемент цены
+`imageElement: HTMLImageElement` - html элемент картинки
+`categoryElement: HTMLElement` - html элемент категории
+`descriptionElement: HTMLElement` - html элемент описания
+
+Методы класса:
+`set title(title: string): void` - устанавливает заголовок карточки
+`set price(price: number | null): void` - устанавливает цену карточки
+`set image(image: string): void` - устанавливает изобржание карточки
+`set category(category: string): void` - устанавливает категорию карточки
+`set description(description: string): void` - устанавливает описание карточки
+`render(data: IBasketCardView): HTMLElement` - рендерит карточку на экране
+
+
+#### Класс BasketCardView
+Является классом представления карточки в корзине
+
+Поля класса:
+`idElement: HTMLElement` - html элемент id
+`titleElement: HTMLElement` - html элемент заголовка
+`priceElement: HTMLElement` - html элемент цены
+
+Методы класса:
+`set id(id: string): void` - устанавливает id карточки
+`set title(title: string): void` - устанавливает заголовок карточки
+`set price(price: number | null): void` - устанавливает цену карточки
+`render(data: IBasketCardView): HTMLElement` - рендерит карточку на экране
+
+
+#### Класс OrderFormView
+Является классом представления формы заказа
+
+Поля класса:
+`events: IEvents` - обрабатываеме события 
+`cardButton: HTMLButtonElement` - кнопка выбора оплаты онлайн
+`cashButton: HTMLButtonElement` - кнопка выбора оплаты деньгами
+`addressInput: HTMLInputElement` - html элемент ввода адреса
+
+Методы класса:
+`addEventListeners(): void` - поставить слушателей на события ввода данных
+`set payment(payment: TPayment): void` - устанавливает тип оплаты покупателя
+`set address(address: string): void` - устанавливает адресс покупателя
+`render(data: Partial<IContactsFormView>): HTMLElement` - рендерит информацию на экране
+
+
+#### Класс ContactsFormView
+Является классом представления формы контактов
+
+Поля класса:
+`events: IEvents` - обрабатываеме события 
+`emailInput: HTMLInputElement` - html элемент ввода электронной почты
+`phoneInput: HTMLInputElement` - html элемент ввода телефона
+
+Методы класса:
+`addEventListeners(): void` - поставить слушателей на события ввода данных
+`set email(email: string): void` - устанавливает электронную почту покупателя
+`set phone(phone: string): void` - устанавливает номер телефона покупателя
+`render(data: Partial<IContactsFormView>): HTMLElement` - рендерит информацию на экране
+
+
+#### Класс ModalView
+Является классом представления модального окна
+
+Поля класса:
+`closeButton: HTMLButtonElement` - кнопка закрытия окна
+`contentContainer: HTMLElement` - html элемент контейнера окна
+
+Методы класса:
+`set content(content: HTMLElement)` - 
+`open(): void` - открыть модальное окно
+`close(): void` - закрыть модальное окно
+`render(data: Partial<IModalView>): HTMLElement` - рендерит модальное окно на экране
+
+
+#### Класс CatalogView
+Является классом представления каталога
+
+Методы класса:
+`set items(items: HTMLElement[])` - устанавливает предметы в каталоге
+
+
+#### Класс BasketView 
+Является классом представления корзины
+
+Поля класса:
+`listElement: HTMLUListElement` - html элемент списка карточков
+`priceElement: HTMLElement` - html элемент цены карточки
+
+Методы класса:
+`render(data: IBasketView): HTMLElement` - рендер списка карточек на экран
+
+#### Генерируемые события 
+`catalog:changed` - изменения в каталоге
+`preview:select` - показ текущего элемента
+`preview:add` - добавить текущий элемент в корзину
+`preview:delete` - удалить текущий элемент из корзины
+`preview:added` - отобразить статус текущего элемента, что он добавлен в корзину
+`preview:deleted` - отобразить статус текущего элемента, что он удален из корзины
+`basket:select` - открытие корзиные
+`basketElement:delete` - удалить карточку из корзины
+`form.order:select` - показ данных заказа
+`buyer.order:check` - проверка заполненности данных заказа
+`order.payment:change` - изменение типа оплаты
+`order.address:change` - изменение адреса
+`form.contacts:select` - показ контактных данных покупателя
+`buyer.contacts:check` - проверка заполненности данных покупателя
+`order.email:change` - изменение email
+`order.phone:change` - изменение телефона
+`success:select` - - открытие окна успешно выполненной покупки
+
+#### Класс Presenter

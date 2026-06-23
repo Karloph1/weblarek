@@ -39,11 +39,54 @@ export interface IOrderRequest {
   email: string;
   phone: string;
   address: string;
-  items: IProduct['id'][];
+  items: IProduct["id"][];
   total: number;
 }
 
 export interface IOrderResult {
   id: string;
+  total: number;
+}
+
+export interface ICardView {
+  title: string;
+  price: number | null;
+}
+
+export interface ICatalogCardView extends ICardView {
+  image: string;
+  category: string;
+}
+
+export interface IPreviewCardView extends ICardView {
+  image: string;
+  description: string;
+  category: string;
+}
+
+export interface IBasketCardView extends ICardView {
+  id: string;
+}
+
+export interface IOrderFormView {
+  payment: TPayment;
+  address: string;
+}
+
+export interface IContactsFormView {
+  email: string;
+  phone: string;
+}
+
+export interface IModalView {
+  content: HTMLElement;
+}
+
+export interface IItemView {
+  items: HTMLElement[];
+}
+
+export interface IBasketView {
+  items: HTMLElement[];
   total: number;
 }
