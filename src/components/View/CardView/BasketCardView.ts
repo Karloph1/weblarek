@@ -1,36 +1,36 @@
 import { IBasketCardView } from "../../../types/index.ts";
-import { Component } from "../../base/Component.ts";
+import { ensureElement } from "../../../utils/utils.ts";
+import { IEvents } from "../../base/Events.ts";
+import { CardView } from "./CardView.ts";
 
-export class BasketCardView extends Component<IBasketCardView> {
+export class BasketCardView extends CardView {
   private readonly idElement: HTMLElement;
-  private readonly titleElement: HTMLElement;
-  private readonly priceElement: HTMLElement;
+  private readonly buttonElement: HTMLButtonElement;
+  private _id: string = '';
   
-  constructor(template: HTMLTemplateElement) {
-    const container = template.content.firstElementChild!.cloneNode(
-      true
-    ) as HTMLElement;
+  constructor(element: HTMLElement, events: IEvents) {
+    super(element, events);
 
-    super(container);
-
-    this.idElement = container.querySelector(".basket__item-index")!;
-    this.titleElement = container.querySelector(".card__title")!;
-    this.priceElement = container.querySelector(".card__price")!;
+    this.idElement = ensureElement<HTMLButtonElement>(".basket__item-index", element);
+    this.buttonElement = ensureElement<HTMLButtonElement>(".card__button", element);
+  
+    this.addEventListeners();
+  }
+  
+  addEventListeners() {
+    this.buttonElement.addEventListener("click", () => {
+      this.events.emit("basketElement:delete", {
+        id: this._id
+      });
+    })
   }
   
   set id(id: string) {
+    this._id = id;
+  }
+  
+  set number(id: string) {
     this.idElement.textContent = id;
-  }
-
-  set title(title: string) {
-    this.titleElement.textContent = title;
-  }
-
-  set price(price: number | null) {
-    this.priceElement.textContent =
-      price === null
-        ? "Бесценно"
-        : `${price} синапсов`;
   }
 
   render(data: IBasketCardView): HTMLElement {

@@ -1,4 +1,5 @@
 import { IModalView } from "../../types";
+import { ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
 
 export class ModalView extends Component<IModalView> {
@@ -8,23 +9,29 @@ export class ModalView extends Component<IModalView> {
   constructor(container: HTMLElement) {
     super(container);
 
-    this.closeButton = container.querySelector(
-      '.modal__close'
-    ) as HTMLButtonElement;
+    this.closeButton = ensureElement<HTMLButtonElement>(
+      ".modal__close",
+      container,
+    );
 
-    this.contentContainer = container.querySelector(
-      '.modal__content'
-    ) as HTMLElement;
+    this.contentContainer = ensureElement<HTMLElement>(
+      ".modal__content",
+      container,
+    );
 
-    this.closeButton.addEventListener('click', () => {
+    this.addEventListeners();
+  }
+
+  addEventListeners() {
+    this.closeButton.addEventListener("click", () => {
       this.close();
     });
 
-    this.container.addEventListener('click', () => {
+    this.container.addEventListener("click", () => {
       this.close();
     });
 
-    this.contentContainer.addEventListener('click', (event) => {
+    this.contentContainer.addEventListener("click", (event) => {
       event.stopPropagation();
     });
   }
@@ -34,18 +41,17 @@ export class ModalView extends Component<IModalView> {
   }
 
   open(): void {
-    this.container.classList.add('modal_active');
+    this.container.classList.add("modal_active");
   }
 
   close(): void {
-    this.container.classList.remove('modal_active');
+    this.container.classList.remove("modal_active");
     this.contentContainer.replaceChildren();
   }
 
   render(data: Partial<IModalView>): HTMLElement {
     super.render(data);
     this.open();
-
     return this.container;
   }
 }

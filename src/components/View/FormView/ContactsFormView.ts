@@ -1,27 +1,26 @@
-import { IContactsFormView } from "../../../types";
-import { Component } from "../../base/Component";
+import { IBuyer, IContactsFormView } from "../../../types";
+import { ensureElement } from "../../../utils/utils";
 import { IEvents } from "../../base/Events";
+import { FormView } from "./FormView";
 
-export class ContactsFormView extends Component<IContactsFormView> {
-  private readonly events: IEvents;
+export class ContactsFormView extends FormView {
   private readonly emailInput: HTMLInputElement;
   private readonly phoneInput: HTMLInputElement;
+  private readonly submitButton: HTMLButtonElement;
 
-  constructor(template: HTMLTemplateElement, events: IEvents) {
-    const container = template.content.firstElementChild!.cloneNode(
-      true,
-    ) as HTMLElement;
+  constructor(element: HTMLElement, events: IEvents) {
+    super(element, events);
 
-    super(container);
-
-    this.events = events;
-    this.emailInput = container.querySelector(
+    this.emailInput = ensureElement<HTMLInputElement>(
       'input[name="email"]',
-    ) as HTMLInputElement;
-    this.phoneInput = container.querySelector(
+      element,
+    );
+    this.phoneInput = ensureElement<HTMLInputElement>(
       'input[name="phone"]',
-    ) as HTMLInputElement;
-
+      element,
+    );
+    this.submitButton = ensureElement<HTMLButtonElement>(".button", element);
+  
     this.addEventListeners();
   }
 
@@ -37,6 +36,10 @@ export class ContactsFormView extends Component<IContactsFormView> {
         phone: this.phoneInput.value,
       });
     });
+
+    this.submitButton.addEventListener("click", () => {
+      this.events.emit("success:open");
+    });
   }
 
   set email(email: string) {
@@ -46,6 +49,19 @@ export class ContactsFormView extends Component<IContactsFormView> {
   set phone(phone: string) {
     this.phoneInput.value = phone;
   }
+
+  set valid(error: Partial<Record<keyof IBuyer, string>>) {
+    const email = error.email;
+    const phone = error.phone;
+
+    const isAllowed: Boolean = email === undefined && phone === undefined;
+
+    this.events.emit("submitButton:change", {
+      isAllowed: isAllowed,
+      htmlButton: this.submitButton,
+    });
+  }
+  
 
   render(data: Partial<IContactsFormView>): HTMLElement {
     super.render(data);

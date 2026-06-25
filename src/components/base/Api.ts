@@ -23,7 +23,6 @@ export class Api {
   }
 
   get<T extends object>(uri: string) {
-    console.log(this.baseUrl + uri);
     return fetch(this.baseUrl + uri, {
       ...this.options,
       method: "GET",

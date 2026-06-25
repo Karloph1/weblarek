@@ -22,6 +22,8 @@ export type TValidateArray = Partial<Record<keyof IBuyer, string>>;
 
 export type TPayment = "card" | "cash" | "";
 
+export type TCategory = 'софт-скил' | 'хард-скил' | 'кнопка' | 'дополнительное' | 'другое';
+
 export interface IBuyer {
   payment: TPayment;
   email: string;
@@ -49,31 +51,44 @@ export interface IOrderResult {
 }
 
 export interface ICardView {
+  id: string,
   title: string;
   price: number | null;
 }
 
 export interface ICatalogCardView extends ICardView {
-  image: string;
+  image: {
+    src: string,
+    alt: string
+  };
   category: string;
 }
 
 export interface IPreviewCardView extends ICardView {
-  image: string;
+  image: {
+    src: string,
+    alt: string
+  };
   description: string;
   category: string;
+  buttonText: string;
 }
 
 export interface IBasketCardView extends ICardView {
-  id: string;
+  number: string;
 }
 
-export interface IOrderFormView {
+export interface IFormView {
+  valid: Partial<Record<keyof IBuyer, string>>;
+  error: Partial<Record<keyof IBuyer, string>>;
+}
+
+export interface IOrderFormView extends IFormView {
   payment: TPayment;
   address: string;
 }
 
-export interface IContactsFormView {
+export interface IContactsFormView extends IFormView {
   email: string;
   phone: string;
 }
@@ -89,4 +104,13 @@ export interface IItemView {
 export interface IBasketView {
   items: HTMLElement[];
   total: number;
+  purchasable: number;
+}
+
+export interface IBasketButtonView {
+  
+}
+
+export interface ISuccessView {
+  price: number
 }

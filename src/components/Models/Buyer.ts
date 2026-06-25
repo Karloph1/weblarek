@@ -11,18 +11,26 @@ export class Buyer {
 
   setBuyerPayment(payment: TPayment): void {
     this.payment = payment;
+
+    this.events.emit("buyer:change");
   }
 
   setBuyerEmail(email: string): void {
     this.email = email;
+
+    this.events.emit("buyer:change");
   }
 
   setBuyerPhone(phone: string): void {
     this.phone = phone;
+
+    this.events.emit("buyer:change");
   }
 
   setBuyerAddress(address: string): void {
     this.address = address;
+
+    this.events.emit("buyer:change");
   }
 
   getBuyer(): IBuyer {
@@ -39,6 +47,8 @@ export class Buyer {
     this.email = "";
     this.phone = "";
     this.address = "";
+
+    this.events.emit("buyer:change");
   }
 
   validateBuyer(): TValidateArray {
@@ -57,7 +67,7 @@ export class Buyer {
     }
 
     if (this.address === "") {
-      errors.address = "Укажите адресс";
+      errors.address = "Укажите адрес";
     }
 
     return errors;

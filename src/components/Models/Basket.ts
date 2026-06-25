@@ -17,7 +17,7 @@ export class Basket {
   addProduct(product: IProduct): void {
     this.products.push(product);
 
-    this.events.emit("preview:added");
+    this.events.emit("basketSize:change");
   }
 
   deleteProduct(product: IProduct): void {
@@ -27,11 +27,13 @@ export class Basket {
       this.products.splice(indexProduct, 1);
     }
 
-    this.events.emit("preview:deleted");
+    this.events.emit("basketSize:change");
   }
 
   clearBasket(): void {
     this.products = [];
+
+    this.events.emit("basketSize:change");
   }
 
   getGeneralPrice(): number {

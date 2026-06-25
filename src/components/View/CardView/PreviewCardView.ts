@@ -1,51 +1,70 @@
-import { IPreviewCardView } from "../../../types/index.ts";
-import { Component } from "../../base/Component.ts";
+import { IPreviewCardView, TCategory } from "../../../types/index.ts";
+import { categoryMap, CDN_URL } from "../../../utils/constants.ts";
+import { ensureElement } from "../../../utils/utils.ts";
+import { IEvents } from "../../base/Events";
+import { CardView } from "./CardView.ts";
 
-export class PreviewCardView extends Component<IPreviewCardView> {
-  private readonly titleElement: HTMLElement;
-  private readonly priceElement: HTMLElement;
+export class PreviewCardView extends CardView {
   private readonly imageElement: HTMLImageElement;
   private readonly categoryElement: HTMLElement;
   private readonly descriptionElement: HTMLElement;
+  private readonly basketButton: HTMLButtonElement;
 
+  constructor(element: HTMLElement, events: IEvents) {
+    super(element, events);
 
-  constructor(template: HTMLTemplateElement) {
-    const container = template.content.firstElementChild!.cloneNode(
-      true,
-    ) as HTMLElement;
-
-    super(container);
-
-    this.titleElement = container.querySelector(".card__title")!;
-    this.priceElement = container.querySelector(".card__price")!;
-    this.imageElement = container.querySelector(".card__image")!;
-    this.categoryElement = container.querySelector(".card__category")!;
-    this.descriptionElement = container.querySelector(".card__text")!;
-  }
-
-  set title(title: string) {
-    this.titleElement.textContent = title;
-  }
-
-  set price(price: number | null) {
-    this.priceElement.textContent =
-      price === null ? "Бесценно" : `${price} синапсов`;
-  }
-
-  set image(image: string) {
-    this.setImage(
-      this.imageElement,
-      image,
-      this.titleElement.textContent || "",
+    this.imageElement = ensureElement<HTMLImageElement>(
+      ".card__image",
+      element,
     );
+    this.categoryElement = ensureElement<HTMLElement>(
+      ".card__category",
+      element,
+    );
+    this.descriptionElement = ensureElement<HTMLElement>(
+      ".card__text",
+      element,
+    );
+    this.basketButton = ensureElement<HTMLButtonElement>(
+      ".card__button",
+      element,
+    );
+
+    this.addEventListeners();
   }
 
-  set category(category: string) {
+  addEventListeners() {
+    this.basketButton.addEventListener("click", () => {
+      this.events.emit("previewButton:change");
+    });
+  }
+
+  set image(imageInfo: { src: string; alt: string }) {
+    this.setImage(this.imageElement, CDN_URL + imageInfo.src, imageInfo.alt);
+  }
+
+  set category(category: TCategory) {
+    Array.from(this.categoryElement.classList).forEach((className) => {
+      if (className.startsWith("card__category_")) {
+        this.categoryElement.classList.remove(className);
+      }
+    });
+    
+    this.categoryElement.classList.add(categoryMap[category]);
     this.categoryElement.textContent = category;
   }
 
   set description(description: string) {
     this.descriptionElement.textContent = description;
+  }
+
+  set buttonText(text: string) {
+    this.basketButton.textContent = text;
+
+    this.events.emit("previewButton:check", {
+      htmlButton: this.basketButton,
+      price: this.priceElement.textContent
+    })
   }
 
   render(data: IPreviewCardView): HTMLElement {

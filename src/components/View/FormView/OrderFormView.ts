@@ -1,27 +1,34 @@
-import { IOrderFormView, TPayment } from "../../../types";
-import { Component } from "../../base/Component";
+import { IBuyer, IOrderFormView, TPayment } from "../../../types";
+import { ensureElement } from "../../../utils/utils";
 import { IEvents } from "../../base/Events";
+import { FormView } from "./FormView";
 
-export class OrderFormView extends Component<IOrderFormView> {
-  private readonly events: IEvents;
+export class OrderFormView extends FormView {
   private readonly cardButton: HTMLButtonElement;
   private readonly cashButton: HTMLButtonElement;
   private readonly addressInput: HTMLInputElement;
+  private readonly nextButton: HTMLButtonElement;
 
-  constructor(template: HTMLTemplateElement, events: IEvents) {
-    const container = template.content.firstElementChild!.cloneNode(
-      true,
-    ) as HTMLElement;
+  constructor(element: HTMLElement, events: IEvents) {
+    super(element, events);
 
-    super(container);
-
-    this.events = events;
-    this.cardButton = container.querySelector('button[name="card"]') as HTMLButtonElement;
-    this.cashButton = container.querySelector('button[name="cash"]') as HTMLButtonElement;
-    this.addressInput = container.querySelector(
+    this.cardButton = ensureElement<HTMLButtonElement>(
+      'button[name="card"]',
+      element,
+    );
+    this.cashButton = ensureElement<HTMLButtonElement>(
+      'button[name="cash"]',
+      element,
+    );
+    this.addressInput = ensureElement<HTMLInputElement>(
       'input[name="address"]',
-    ) as HTMLInputElement;
-
+      element,
+    );
+    this.nextButton = ensureElement<HTMLButtonElement>(
+      ".order__button",
+      element,
+    );
+    
     this.addEventListeners();
   }
 
@@ -43,6 +50,10 @@ export class OrderFormView extends Component<IOrderFormView> {
         address: this.addressInput.value,
       });
     });
+
+    this.nextButton.addEventListener("click", () => {
+      this.events.emit("form.contacts:open");
+    });
   }
 
   set payment(payment: TPayment) {
@@ -53,6 +64,19 @@ export class OrderFormView extends Component<IOrderFormView> {
   set address(address: string) {
     this.addressInput.value = address;
   }
+
+  set valid(error: Partial<Record<keyof IBuyer, string>>) {
+    const payment = error.payment;
+    const address = error.address;
+
+    const isAllowed: Boolean = payment === undefined && address === undefined;
+
+    this.events.emit("nextButton:change", {
+      isAllowed: isAllowed,
+      htmlButton: this.nextButton,
+    });
+  }
+
 
   render(data: Partial<IOrderFormView>): HTMLElement {
     super.render(data);
