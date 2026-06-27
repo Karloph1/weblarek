@@ -1,4 +1,4 @@
-import { IBuyer, IFormView } from "../../../types";
+import { IFormView } from "../../../types";
 import { ensureElement } from "../../../utils/utils";
 import { Component } from "../../base/Component";
 import { IEvents } from "../../base/Events";
@@ -13,12 +13,8 @@ export abstract class FormView extends Component<IFormView> {
     this.errorElement = ensureElement<HTMLElement>(".form__errors", element);
   }
 
-  set error(error: Partial<Record<keyof IBuyer, string>>) {
-
-    this.events.emit("errors:show", {
-      errors: error,
-      errorText: this.errorElement,
-    });
+  set error(value: string) {
+    this.errorElement.textContent = value;
   }
 
   render(data: Partial<IFormView>): HTMLElement {

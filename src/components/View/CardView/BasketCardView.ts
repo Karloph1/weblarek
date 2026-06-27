@@ -1,34 +1,26 @@
 import { IBasketCardView } from "../../../types/index.ts";
 import { ensureElement } from "../../../utils/utils.ts";
-import { IEvents } from "../../base/Events.ts";
 import { CardView } from "./CardView.ts";
 
 export class BasketCardView extends CardView {
   private readonly idElement: HTMLElement;
   private readonly buttonElement: HTMLButtonElement;
-  private _id: string = '';
-  
-  constructor(element: HTMLElement, events: IEvents) {
-    super(element, events);
 
-    this.idElement = ensureElement<HTMLButtonElement>(".basket__item-index", element);
-    this.buttonElement = ensureElement<HTMLButtonElement>(".card__button", element);
-  
-    this.addEventListeners();
+  constructor(element: HTMLElement, onClick: () => void) {
+    super(element);
+
+    this.idElement = ensureElement<HTMLButtonElement>(
+      ".basket__item-index",
+      element,
+    );
+    this.buttonElement = ensureElement<HTMLButtonElement>(
+      ".card__button",
+      element,
+    );
+
+    this.buttonElement.addEventListener("click", onClick);
   }
-  
-  addEventListeners() {
-    this.buttonElement.addEventListener("click", () => {
-      this.events.emit("basketElement:delete", {
-        id: this._id
-      });
-    })
-  }
-  
-  set id(id: string) {
-    this._id = id;
-  }
-  
+
   set number(id: string) {
     this.idElement.textContent = id;
   }

@@ -1,16 +1,13 @@
 import { ICardView } from "../../../types";
 import { ensureElement } from "../../../utils/utils";
 import { Component } from "../../base/Component";
-import { IEvents } from "../../base/Events";
 
 export abstract class CardView extends Component<ICardView> {
-  protected readonly events: IEvents;
   protected readonly titleElement: HTMLElement;
   protected readonly priceElement: HTMLElement;
 
-  constructor(element: HTMLElement, events: IEvents) {
+  constructor(element: HTMLElement) {
     super(element);
-    this.events = events;
     this.titleElement = ensureElement<HTMLButtonElement>(
       ".card__title",
       element,

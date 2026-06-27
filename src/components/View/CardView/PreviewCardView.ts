@@ -9,9 +9,11 @@ export class PreviewCardView extends CardView {
   private readonly categoryElement: HTMLElement;
   private readonly descriptionElement: HTMLElement;
   private readonly basketButton: HTMLButtonElement;
+  private events: IEvents;
 
   constructor(element: HTMLElement, events: IEvents) {
-    super(element, events);
+    super(element);
+    this.events = events;
 
     this.imageElement = ensureElement<HTMLImageElement>(
       ".card__image",
@@ -49,7 +51,7 @@ export class PreviewCardView extends CardView {
         this.categoryElement.classList.remove(className);
       }
     });
-    
+
     this.categoryElement.classList.add(categoryMap[category]);
     this.categoryElement.textContent = category;
   }
@@ -60,11 +62,10 @@ export class PreviewCardView extends CardView {
 
   set buttonText(text: string) {
     this.basketButton.textContent = text;
+  }
 
-    this.events.emit("previewButton:check", {
-      htmlButton: this.basketButton,
-      price: this.priceElement.textContent
-    })
+  set buttonDisabled(value: boolean) {
+    this.basketButton.disabled = value;
   }
 
   render(data: IPreviewCardView): HTMLElement {

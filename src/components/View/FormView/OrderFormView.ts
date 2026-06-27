@@ -1,4 +1,4 @@
-import { IBuyer, IOrderFormView, TPayment } from "../../../types";
+import { IOrderFormView, TPayment } from "../../../types";
 import { ensureElement } from "../../../utils/utils";
 import { IEvents } from "../../base/Events";
 import { FormView } from "./FormView";
@@ -28,7 +28,7 @@ export class OrderFormView extends FormView {
       ".order__button",
       element,
     );
-    
+
     this.addEventListeners();
   }
 
@@ -51,7 +51,8 @@ export class OrderFormView extends FormView {
       });
     });
 
-    this.nextButton.addEventListener("click", () => {
+    this.container.addEventListener("submit", (event) => {
+      event.preventDefault();
       this.events.emit("form.contacts:open");
     });
   }
@@ -65,18 +66,9 @@ export class OrderFormView extends FormView {
     this.addressInput.value = address;
   }
 
-  set valid(error: Partial<Record<keyof IBuyer, string>>) {
-    const payment = error.payment;
-    const address = error.address;
-
-    const isAllowed: Boolean = payment === undefined && address === undefined;
-
-    this.events.emit("nextButton:change", {
-      isAllowed: isAllowed,
-      htmlButton: this.nextButton,
-    });
+  set valid(value: boolean) {
+    this.nextButton.disabled = !value;
   }
-
 
   render(data: Partial<IOrderFormView>): HTMLElement {
     super.render(data);

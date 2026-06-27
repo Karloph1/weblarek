@@ -72,6 +72,7 @@ export interface IPreviewCardView extends ICardView {
   description: string;
   category: string;
   buttonText: string;
+  buttonDisabled: boolean;
 }
 
 export interface IBasketCardView extends ICardView {
@@ -79,8 +80,8 @@ export interface IBasketCardView extends ICardView {
 }
 
 export interface IFormView {
-  valid: Partial<Record<keyof IBuyer, string>>;
-  error: Partial<Record<keyof IBuyer, string>>;
+  valid: boolean;
+  error: string;
 }
 
 export interface IOrderFormView extends IFormView {
@@ -104,11 +105,11 @@ export interface IItemView {
 export interface IBasketView {
   items: HTMLElement[];
   total: number;
-  purchasable: number;
+  buttonDisabled: boolean;
 }
 
 export interface IBasketButtonView {
-  
+  counter: number;
 }
 
 export interface ISuccessView {

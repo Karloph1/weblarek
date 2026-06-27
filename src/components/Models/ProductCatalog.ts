@@ -15,7 +15,7 @@ export class ProductCatalog {
   setProducts(products: IProduct[]): void {
     this.products = products;
 
-    this.events.emit("catalog:init");
+    this.events.emit("catalog:changed");
   }
 
   getProducts(): IProduct[] {
@@ -33,7 +33,7 @@ export class ProductCatalog {
   setCurrentProduct(product: IProduct): void {
     this.currentProduct = product;
 
-    this.events.emit("preview:show");
+    this.events.emit("preview:changed");
   }
 
   getCurrentProduct(): IProduct | null {

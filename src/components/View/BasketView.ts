@@ -33,25 +33,18 @@ export class BasketView extends Component<IBasketView> {
   }
 
   set items(items: HTMLElement[]) {
-
-    this.listElement.innerHTML = "";
-    items.forEach((item) => this.listElement.appendChild(item));
+    this.listElement.replaceChildren(...items);
   }
 
   set total(total: number) {
     this.priceElement.textContent = `${total} синапсов`;
   }
 
-  set purchasable(total: number) {
-    const isAllowed = total > 0;
-
-    this.events.emit("basketButton:check", {
-      isAllowed: isAllowed,
-      htmlButton: this.formButton,
-    });
+  set buttonDisabled(value: boolean) {
+    this.formButton.disabled = value;
   }
 
-  render(data: IBasketView): HTMLElement {
+  render(data?: IBasketView): HTMLElement {
     super.render(data);
 
     return this.container;

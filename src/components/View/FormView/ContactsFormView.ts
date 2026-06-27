@@ -1,4 +1,4 @@
-import { IBuyer, IContactsFormView } from "../../../types";
+import { IContactsFormView } from "../../../types";
 import { ensureElement } from "../../../utils/utils";
 import { IEvents } from "../../base/Events";
 import { FormView } from "./FormView";
@@ -20,7 +20,7 @@ export class ContactsFormView extends FormView {
       element,
     );
     this.submitButton = ensureElement<HTMLButtonElement>(".button", element);
-  
+
     this.addEventListeners();
   }
 
@@ -37,8 +37,9 @@ export class ContactsFormView extends FormView {
       });
     });
 
-    this.submitButton.addEventListener("click", () => {
-      this.events.emit("success:open");
+    this.container.addEventListener("submit", (event) => {
+      event.preventDefault();
+      this.events.emit("contacts:submit");
     });
   }
 
@@ -50,18 +51,9 @@ export class ContactsFormView extends FormView {
     this.phoneInput.value = phone;
   }
 
-  set valid(error: Partial<Record<keyof IBuyer, string>>) {
-    const email = error.email;
-    const phone = error.phone;
-
-    const isAllowed: Boolean = email === undefined && phone === undefined;
-
-    this.events.emit("submitButton:change", {
-      isAllowed: isAllowed,
-      htmlButton: this.submitButton,
-    });
+  set valid(value: boolean) {
+    this.submitButton.disabled = !value;
   }
-  
 
   render(data: Partial<IContactsFormView>): HTMLElement {
     super.render(data);
